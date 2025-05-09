@@ -1,84 +1,69 @@
 import java.util.Scanner;
 
-public class ticTactoe{
-	public static void main(String[] args){
-		Scanner sc = new Scanner(System.in);
-		
-		char[][] board = {{' ', ' ', ' ' } ,
-						  {' ', ' ', ' ' } ,
-						  {' ', ' ', ' ' }};
-						  
-		boolean gOver = false;
-		
-		int Systemknowerplayer = 9;
-		
-		printBoard(board);
-		
-		//player turn
-		
-		while(gOver == false){
-			for(int i = 0; i < Systemknowerplayer; i++){
-				if(i%2 == 0){
-			
-					char move = 'X';
-						
-					System.out.println();
-					System.out.println("[" + "Player 1 X" + "]");
-					System.out.println();
-					System.out.println("input colmn 1-3");
-					int rows = sc.nextInt() - 1;
-					
-					System.out.println("input rows 1-3 ");
-					int colmn = sc.nextInt() -1;
-					
-					board[colmn][rows] = move;
-						
-					printBoard(board);
-				}else if(i%2 == 1){
-						
-					char move = 'O';
-						
-					System.out.println();
-					System.out.println("[Player 2 O]");
-					System.out.println();
-					System.out.println("input colmn 1-3");
-					int colmn = sc.nextInt() - 1;
-						
-					System.out.println("input rows 1-3 ");
-					int rows = sc.nextInt() -1;
-						
-					board[colmn][rows] = move;
-					printBoard(board);
-				}else{
-					System.out.println("invalid move");
-					printBoard(board);
-				}
-						
-			}
-				
-		}
-
-		
-	//for printing the board 
-	static void printBoard(char[][] board) {
-        System.out.println("Current Board ");
-		System.out.println();
-		System.out.println("       Columns    ");
-		System.out.println(" rows   1    2    3 ");
-		
-        for (int i = 0; i < 3; i++) {	
-			System.out.print("   " + (i + 1) + "  "); // Print row number.
-            for (int j = 0; j < 3; j++) {				
-                if (j < 3) {
-					System.out.print("[ "); // Add vertical separators
-					System.out.print(board[i][j]);
-					System.out.print(" ]");
-				}						
-				
+public class TicTacToe{
+    public static Scanner sc = new Scanner(System.in); 
+    
+    public static void main(String[] args){
+        
+        char[][] board =  new char[3][3];
+        printingBoard(board);
+        playerTurn(board);
+    }
+    
+    public static void printingBoard(char[][] board){
+        
+        System.out.println("               COL");
+        System.out.println("      1         2         3");
+        
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                System.out.print("   [");
+                System.out.print(board[i][j]);
+                System.out.print("    ]");
             }
             System.out.println();
-             // Add horizontal separators
         }
     }
-	
+    
+    public static void playerTurn(char[][] arr){
+        while(true){    
+            try{
+                int row = 0, col = 0;
+                System.out.println("Enter move (row,col)");
+                
+                String input = sc.nextLine();
+                
+                String[] parts = input.split(",\\s*");
+                
+                if(parts.length != 2){
+                    throw new InputMismatchException("Expected row, col");
+                }
+                
+                try{
+                    row = Integer.parseInt(parts[0].trim());
+                }catch(NumberFormatException e){
+                    throw new InputMismatchException("Row must be an integer");
+                }
+                
+                try{
+                    col = Integer.parseInt(parts[1].trim());
+                }catch(NumberFormatException e){
+                    throw new InputMismatchException("Column must be an integer");
+                }
+                
+                if(arr[row][col] != '\0'){ 
+                    System.out.println("That spot is already taken. Try again.");
+                    continue;
+                }
+
+                arr[row][col] = 'X';
+                printingBoard(arr);
+
+            }catch(InputMismatchException e){
+                System.out.println(e.getMessage());
+            }catch(ArrayIndexOutOfBoundsException e){
+                System.out.println("Row and column must be 0-2 only!");
+            }
+        }   
+    }
 }
